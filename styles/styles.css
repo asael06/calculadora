@@ -1,11 +1,21 @@
 :root {
     --dp-color:  rgb(76, 76, 76);
+    --op-color:rgb(249, 144, 61);
+    --op-color-secondary: rgb(225, 225, 225);
+    --dp-text-color: rgb(239, 239, 239);
 }
 
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .barra {
@@ -23,12 +33,12 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    margin-right: .5em;
+    margin-right: 1em;
     padding: .2em;
 }
 
 .barra img {
-    width: 100%;    
+    width: 100%; 
     display: none;
 }
 
@@ -50,8 +60,63 @@
 
 .display, .dp-screen {
     width: 400px;
-    height: 80px;
+    height: 120px;
     background-color: var(--dp-color);
     border: none;
+    color: var(--dp-text-color);
+    font-size: 1.8em;
+    text-align: right;    
+    
+}
+
+.dp-screen {    
+    padding: 0 .2em;
+}
+
+input:focus,button:focus {
+    outline: none;      
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 400px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
+    border-left: 1px solid dimgray;
+}
+
+.calcu {
+    box-shadow: 5px 5px 20px black;
+    border-radius: 5px;
+}
+
+button {
+    flex: 0 1 25%;
+    height: 80px;
+    border: none;
+    border-right: 1px solid dimgray;
+    border-bottom: 1px solid dimgray;
+    font-size: 2em;
+    color: dimgray;
+}
+
+button img {
+    width: 30%;
+}
+
+.button-container button:nth-child(17){
+    flex: 0 1 50%;
+    text-align: left;
+    padding-left: 1.5em;
+}
+
+.operation {
+    background-color: var(--op-color);
+}
+
+.action {
+    background-color: var(--op-color-secondary);
 }
 
