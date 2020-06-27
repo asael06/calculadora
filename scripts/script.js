@@ -21,6 +21,8 @@ var display = document.getElementById('dp-screen')
 var calculator = document.getElementById('calculator')
 var operation = ''
 var eq = false
+var opActivated = false
+var pointActivated = false
 
 calculator.addEventListener('keydown',evt =>{    
     evt.preventDefault()    
@@ -36,29 +38,98 @@ function isOperator(letter){
     return false
 }
 
-n_0.addEventListener('click',() => {printOperation(n_0.innerHTML)})
-n_1.addEventListener('click',() => {printOperation(n_1.innerHTML)})
-n_2.addEventListener('click',() => {printOperation(n_2.innerHTML)})
-n_3.addEventListener('click',() => {printOperation(n_3.innerHTML)})
-n_4.addEventListener('click',() => {printOperation(n_4.innerHTML)})
-n_5.addEventListener('click',() => {printOperation(n_5.innerHTML)})
-n_6.addEventListener('click',() => {printOperation(n_6.innerHTML)})
-n_7.addEventListener('click',() => {printOperation(n_7.innerHTML)})
-n_8.addEventListener('click',() => {printOperation(n_8.innerHTML)})
-n_9.addEventListener('click',() => {printOperation(n_9.innerHTML)})
-multiply.addEventListener('click',() => {printOperation('*')})
-divide.addEventListener('click',() => {printOperation('/')})
-plus.addEventListener('click',() => {printOperation('+')})
-point.addEventListener('click',() => {printOperation('.')})
+n_0.addEventListener('click',() => {
+    printOperation(n_0.innerHTML)
+    printElementScreen(n_0.innerHTML)
+})
+n_1.addEventListener('click',() => {
+    printOperation(n_1.innerHTML)
+    printElementScreen(n_1.innerHTML)
+})
+n_2.addEventListener('click',() => {
+    printOperation(n_2.innerHTML)
+    printElementScreen(n_2.innerHTML)
+})
+n_3.addEventListener('click',() => {
+    printOperation(n_3.innerHTML)
+    printElementScreen(n_3.innerHTML)
+})
+n_4.addEventListener('click',() => {
+    printOperation(n_4.innerHTML)
+    printElementScreen(n_4.innerHTML)
+})
+n_5.addEventListener('click',() => {
+    printOperation(n_5.innerHTML)
+    printElementScreen(n_5.innerHTML)
+})
+n_6.addEventListener('click',() => {
+    printOperation(n_6.innerHTML)
+    printElementScreen(n_6.innerHTML)
+})
+n_7.addEventListener('click',() => {
+    printOperation(n_7.innerHTML)
+    printElementScreen(n_7.innerHTML)
+})
+n_8.addEventListener('click',() => {
+    printOperation(n_8.innerHTML)
+    printElementScreen(n_8.innerHTML)
+})
+n_9.addEventListener('click',() => {
+    printOperation(n_9.innerHTML)
+    printElementScreen(n_9.innerHTML)
+})
+multiply.addEventListener('click',() => {
+    printOperation('*')
+    operatorOrder('*')
+    operatorSolve(ops)
+    opActivated = true
+})
+divide.addEventListener('click',() => {
+    printOperation('/')
+    operatorOrder('/')
+    operatorSolve(ops)
+    opActivated = true
+})
+plus.addEventListener('click',() => {
+    printOperation('+')
+    operatorOrder('+')
+    operatorSolve(ops)
+    opActivated = true
+})
+less.addEventListener('click',() => {
+    printOperation('-')
+    operatorOrder('-')
+    operatorSolve(ops)
+    opActivated = true
+})
+point.addEventListener('click',() => {
+    if(pointActivated){
+        printOperation('')
+        printElementScreen('')    
+    }
+    else{
+        printOperation('.')
+        printElementScreen('.')
+    }
+    pointActivated=true
+})
 equals.addEventListener('click',() => {solveOperation()})
 letterC.addEventListener('click',() => {resteDisplay()})
 
-function printOperation(value){   
-    if(display.value == 0 && !isOperator(value)) display.value = ''
-    if(isOperator(value) && isOperator(operation.substring(operation.length-1)))printOperand(value)
-    else operation = display.value + value
-    display.value = operation
+function printOperation(value){     
+    if((display.value == 0 && !isOperator(value))) display.value = ''   
+    if(isOperator(value) && isOperator(operation.substring(operation.length-1)))printOperand(value)    
+    else operation = operation + value        
     console.log(operation)
+}
+
+function printElementScreen(element){
+    if(opActivated) {
+        display.value = ''            
+    }   
+    
+    display.value += element
+    opActivated = false    
 }
 
 function printOperand(value){    
@@ -66,24 +137,28 @@ function printOperand(value){
 }
 
 function solveOperation(){
-    if(display.value == 0)operation = '0'
-    // else if(isOperator(operation.substring(operation.length - 1))){
-    //     operation += lastNumber(operation)
-    //     eq = true
-    //     console.log(operation)
-    // }
-    if(eq) { operation = display.value +  operation.substring(operation.length - lastNumber(operation).length-1)
+    if(display.value == 0) operation = '0'
+    if(isOperator(operation.substring(operation.length - 1))){
+        operation += lastNumber(operation)
+        eq = true
         console.log(operation)
-        
+    }
+    else {
+        if(eq) { 
+            operation = display.value +  operation.substring(operation.length - lastNumber(operation).length-1)
+            console.log(operation)       
+        }
     }
     eq = true        
-    // var resul = eval(operation)    
-    // display.value = resul
+    var resul = eval(operation)    
+    display.value = resul
 }
 
 function resetValues(){
-    operation = ''  
-    eq = false  
+    operation = ''
+    eq = false
+    opActivated = false
+    pointActivated = false    
 }
 
 function resteDisplay(){
@@ -103,4 +178,93 @@ function lastNumber(operationC){
     var i = cad.length-1
     while(!isNaN(cad[i])) cadf = cad[i--] + cadf
     return cadf
+}
+
+function convertOperationToArray(sentence){
+    var number = ''
+    var sign
+    var array = new Array()
+    var cad = ''
+    for(var i = 0;i < sentence.length;i++){
+        if(isOperator(sentence[i])){
+            sign = sentence[i]
+            array.push(number)
+            array.push(sign)
+            number = ''
+        }
+        else {
+            number += sentence[i]                        
+        }
+    }
+    array.push(lastNumber(sentence))
+    return array
+}
+
+function operations(opa,opb,op){
+    result = 0
+    switch (op) {
+        case '/': result = opa / opb            
+            break;
+        case '*': result = opa * opb            
+            break;
+        case '+': result = Number(opa) + Number(opb) 
+            break;
+        case '-': result = opa - opb            
+            break;        
+    }
+    return result
+}
+
+function solveOperationArr(arr){   
+    var founded = false 
+    for(var i=0;i<arr.length;i++){
+        if(arr[i]=='/' || arr[i]=='*') {
+            arr[i] = operations(arr[i-1],arr[i+1],arr[i]).toString()
+            display.value = arr[i]
+            arr.splice(i+1,1)
+            arr.splice(i-1,1)            
+            return arr
+        }
+    }
+
+    for(var i=0;i<arr.length;i++){
+        if(arr[i]=='+' || arr[i]=='-') {            
+            arr[i] = operations(arr[i-1],arr[i+1],arr[i]).toString()
+            display.value = arr[i]
+            arr.splice(i+1,1)
+            arr.splice(i-1,1)
+            i=0        
+        }
+    }    
+
+    console.log(arr)
+    return arr
+}
+
+var ops = ''
+function operatorOrder(op){
+    if(ops.length == 0 || ops.length == 1)  ops += operatorType(op)
+    else if(ops.length == 2) ops = ops[1] + operatorType(op)
+    console.log(ops)
+    return ops
+}
+
+function operatorType(op){
+    if('+-'.includes(op))return 'a'
+    else if('*/'.includes(op))return 'b'
+    return ''
+}
+
+function operatorSolve(operators){
+    var arr = convertOperationToArray(operation.substring(0,operation.length-1))    
+    if(operators != 'ab' && operators.length == 2) {
+        operation = arrToString(solveOperationArr(arr)) + operation[operation.length-1]        
+        console.log(operation)        
+    }    
+}
+
+function arrToString(arr){
+    var cad = ''
+    for(var i=0;i<arr.length;i++) cad+=arr[i]
+    return cad
 }
